@@ -1,0 +1,61 @@
+services:
+  - type: web
+    name: stinger-v6
+    runtime: node
+    plan: free
+
+    buildCommand: npm install
+    startCommand: npm start
+
+    healthCheckPath: /health
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+      - key: PORT
+        value: 10000
+
+      - key: BOT_NAME
+        value: STINGER VERSION 6
+
+      - key: BOT_VERSION
+        value: 6.0.0
+
+      - key: DEVELOPER
+        value: Alpha
+
+      - key: COUNTRY
+        value: Zimbabwe 🇿🇼
+
+      - key: PREFIX
+        value: .
+
+      - key: AUTO_READ
+        value: false
+
+      - key: AUTO_TYPING
+        value: false
+
+      - key: MAINTENANCE
+        value: false
+
+      - key: PAIR_ENABLED
+        value: true
+
+      - key: PAIR_TIMEOUT
+        value: 120000
+
+      - key: LOG_LEVEL
+        value: info
+
+      - key: LOG_RETENTION
+        value: 5000
+
+      - key: TZ
+        value: Africa/Harare
+
+      - key: ADMIN_PASSWORD_HASH
+        sync: false
+
+    autoDeploy: true
