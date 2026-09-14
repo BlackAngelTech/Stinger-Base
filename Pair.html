@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
+
+  <meta name="theme-color" content="#05060a">
+  <meta name="description" content="STINGER V6 WhatsApp WebPair">
+
+  <title>STINGER V6 — WebPair</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg: #030409;
+      --card: rgba(8, 10, 18, 0.72);
+      --card2: rgba(15, 18, 30, 0.58);
+      --text: #ffffff;
+      --muted: #9da4b8;
+      --accent: #00eaff;
+      --accent2: #7b2cff;
+      --danger: #ff3158;
+      --success: #00ff9d;
+      --border: rgba(0, 234, 255, 0.24);
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      overflow-x: hidden;
+    }
+
+    body {
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* =========================================================
+       BACKGROUND VIDEO
+       ========================================================= */
+
+    .video-bg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -5;
+      filter:
+        brightness(0.34)
+        contrast(1.18)
+        saturate(1.25);
+      pointer-events: none;
+    }
+
+    .video-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -4;
+      pointer-events: none;
+
+      background:
+        radial-gradient(
+          circle at 50% 20%,
+          rgba(0, 234, 255, 0.13),
+          transparent 34%
+        ),
+        radial-gradient(
+          circle at 15% 85%,
+          rgba(123, 44, 255, 0.15),
+          transparent 35%
+        ),
+        linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.48),
+          rgba(3, 4, 9, 0.92)
+        );
+    }
+
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      pointer-events: none;
+      opacity: 0.16;
+
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent 0px,
+          transparent 3px,
+          rgba(255,255,255,0.025) 4px
+        );
+    }
+
+    /* =========================================================
+       PARTICLES
+       ========================================================= */
+
+    .particles {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow:
+        0 0 8px var(--accent),
+        0 0 18px var(--accent);
+      opacity: 0;
+      animation: floatParticle linear infinite;
+    }
+
+    .particle:nth-child(1) {
+      left: 8%;
+      animation-duration: 8s;
+      animation-delay: -2s;
+    }
+
+    .particle:nth-child(2) {
+      left: 17%;
+      animation-duration: 11s;
+      animation-delay: -5s;
+    }
+
+    .particle:nth-child(3) {
+      left: 29%;
+      animation-duration: 9s;
+      animation-delay: -1s;
+    }
+
+    .particle:nth-child(4) {
+      left: 42%;
+      animation-duration: 13s;
+      animation-delay: -7s;
+    }
+
+    .particle:nth-child(5) {
+      left: 56%;
+      animation-duration: 10s;
+      animation-delay: -3s;
+    }
+
+    .particle:nth-child(6) {
+      left: 68%;
+      animation-duration: 12s;
+      animation-delay: -8s;
+    }
+
+    .particle:nth-child(7) {
+      left: 79%;
+      animation-duration: 9s;
+      animation-delay: -4s;
+    }
+
+    .particle:nth-child(8) {
+      left: 91%;
+      animation-duration: 14s;
+      animation-delay: -10s;
+    }
+
+    @keyframes floatParticle {
+      0% {
+        transform: translateY(110vh) scale(0.4);
+        opacity: 0;
+      }
+
+      15% {
+        opacity: 0.85;
+      }
+
+      75% {
+        opacity: 0.65;
+      }
+
+      100% {
+        transform: translateY(-10vh) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    /* =========================================================
+       AUDIO BUTTON
+       ========================================================= */
+
+    .sound-btn {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 50;
+
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      color: white;
+      background: rgba(5, 8, 15, 0.72);
+      border: 1px solid rgba(0, 234, 255, 0.32);
+
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+
+      box-shadow:
+        0 0 18px rgba(0, 234, 255, 0.14);
+
+      cursor: pointer;
+      font-size: 19px;
+
+      transition: 0.25s ease;
+    }
+
+    .sound-btn:hover {
+      transform: scale(1.08);
+      border-color: var(--accent);
+      box-shadow:
+        0 0 25px rgba(0, 234, 255, 0.35);
+    }
+
+    /* =========================================================
+       MAIN
+       ========================================================= */
+
+    .page {
+      width: 100%;
+      min-height: 100vh;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 35px 16px;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 470px;
+      position: relative;
+    }
+
+    /* =========================================================
+       LOGO
+       ========================================================= */
+
+    .brand {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-ring {
+      width: 126px;
+      height: 126px;
+      margin: 0 auto 15px;
+
+      position: relative;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 50%;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(0, 234, 255, 0.13),
+          rgba(5, 7, 13, 0.48) 62%,
+          transparent 70%
+        );
+
+      animation:
+        logoFloat 4s ease-in-out infinite,
+        logoPulse 2.8s ease-in-out infinite;
+    }
+
+    .logo-ring::before,
+    .logo-ring::after {
+      content: "";
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 234, 255, 0.45);
+      animation: rotateRing 8s linear infinite;
+    }
+
+    .logo-ring::after {
+      inset: -10px;
+      border-color: rgba(123, 44, 255, 0.22);
+      animation:
+        rotateRingReverse 12s linear infinite;
+    }
+
+    .logo {
+      width: 86px;
+      height: 86px;
+      object-fit: contain;
+
+      filter:
+        drop-shadow(0 0 8px rgba(0, 234, 255, 0.8))
+        drop-shadow(0 0 25px rgba(0, 234, 255, 0.35));
+
+      animation: logoGlow 2.4s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    @keyframes logoFloat {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    @keyframes logoPulse {
+      0%, 100% {
+        filter:
+          drop-shadow(0 0 0 rgba(0, 234, 255, 0));
+      }
+
+      50% {
+        filter:
+          drop-shadow(0 0 18px rgba(0, 234, 255, 0.2));
+      }
+    }
+
+    @keyframes logoGlow {
+      0%, 100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.06);
+      }
+    }
+
+    @keyframes rotateRing {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes rotateRingReverse {
+      from {
+        transform: rotate(360deg);
+      }
+
+      to {
+        transform: rotate(0deg);
+      }
+    }
+
+    .brand h1 {
+      font-size: 29px;
+      font-weight: 900;
+      letter-spacing: 3px;
+
+      background:
+        linear-gradient(
+          90deg,
+          #ffffff,
+          var(--accent),
+          #ffffff,
+          #a76bff
+        );
+
+      background-size: 300% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+
+      animation: titleFlow 5s linear infinite;
+    }
+
+    @keyframes titleFlow {
+      to {
+        background-position: 300% center;
+      }
+    }
+
+    .brand p {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* =========================================================
+       CARD
+       ========================================================= */
+
+    .card {
+      position: relative;
+
+      padding: 25px 20px 20px;
+
+      border-radius: 25px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(12, 16, 28, 0.82),
+          rgba(3, 5, 12, 0.72)
+        );
+
+      border: 1px solid var(--border);
+
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+
+      box-shadow:
+        0 20px 70px rgba(0, 0, 0, 0.45),
+        inset 0 1px rgba(255,255,255,0.05),
+        0 0 45px rgba(0, 234, 255, 0.06);
+
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      top: -100px;
+      right: -80px;
+
+      border-radius: 50%;
+
+      background: var(--accent);
+      filter: blur(90px);
+      opacity: 0.12;
+      pointer-events: none;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      bottom: -100px;
+      left: -80px;
+
+      border-radius: 50%;
+
+      background: var(--accent2);
+      filter: blur(90px);
+      opacity: 0.11;
+      pointer-events: none;
+    }
+
+    .status-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 10px 12px;
+      margin-bottom: 21px;
+
+      border-radius: 13px;
+
+      background: rgba(0,0,0,0.22);
+      border: 1px solid rgba(255,255,255,0.055);
+    }
+
+    .status-left {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+
+      color: #dfe5f2;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--success);
+
+      box-shadow:
+        0 0 8px var(--success),
+        0 0 17px rgba(0,255,157,0.55);
+
+      animation: statusPulse 1.5s infinite;
+    }
+
+    @keyframes statusPulse {
+      50% {
+        transform: scale(0.72);
+        opacity: 0.6;
+      }
+    }
+
+    .version {
+      color: var(--accent);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .heading {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .heading h2 {
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    .heading p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    /* =========================================================
+       INPUT
+       ========================================================= */
+
+    .field {
+      margin-top: 16px;
+    }
+
+    .field label {
+      display: block;
+      color: #cdd4e4;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin: 0 0 8px 4px;
+      text-transform: uppercase;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+
+      color: var(--accent);
+      font-size: 17px;
+      z-index: 2;
+    }
+
+    input {
+      width: 100%;
+      height: 54px;
+
+      padding: 0 15px 0 46px;
+
+      border-radius: 15px;
+
+      color: white;
+      background: rgba(0,0,0,0.30);
+
+      border: 1px solid rgba(255,255,255,0.08);
+
+      outline: none;
+
+      font-size: 15px;
+      font-weight: 650;
+      letter-spacing: 1px;
+
+      transition: 0.25s ease;
+    }
+
+    input::placeholder {
+      color: #6e7588;
+      font-weight: 500;
+    }
+
+    input:focus {
+      border-color: rgba(0,234,255,0.62);
+
+      box-shadow:
+        0 0 0 3px rgba(0,234,255,0.07),
+        0 0 24px rgba(0,234,255,0.09);
+    }
+
+    /* =========================================================
+       BUTTONS
+       ========================================================= */
+
+    .btn {
+      width: 100%;
+      height: 54px;
+
+      border: none;
+      border-radius: 15px;
+
+      margin-top: 16px;
+
+      cursor: pointer;
+
+      color: #02050a;
+
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 1px;
+
+      background:
+        linear-gradient(
+          100deg,
+          #00eaff,
+          #8df6ff,
+          #00eaff
+        );
+
+      background-size: 220% auto;
+
+      box-shadow:
+        0 10px 30px rgba(0,234,255,0.16);
+
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+      animation: buttonFlow 4s linear infinite;
+    }
+
+    @keyframes buttonFlow {
+      to {
+        background-position: 220% center;
+      }
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+
+      box-shadow:
+        0 15px 35px rgba(0,234,255,0.25);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .cancel-btn {
+      color: #ffb3bf;
+
+      background:
+        rgba(255,49,88,0.08);
+
+      border: 1px solid rgba(255,49,88,0.20);
+
+      box-shadow: none;
+
+      animation: none;
+    }
+
+    .cancel-btn:hover {
+      box-shadow:
+        0 0 25px rgba(255,49,88,0.12);
+    }
+
+    /* =========================================================
+       PAIRING RESULT
+       ========================================================= */
+
+    .result {
+      display: none;
+      margin-top: 20px;
+
+      padding: 17px;
+
+      border-radius: 17px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(0,234,255,0.065),
+          rgba(123,44,255,0.045)
+        );
+
+      border: 1px solid rgba(0,234,255,0.18);
+
+      animation: resultIn 0.45s ease;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    @keyframes resultIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+
+      color: #dffcff;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.7px;
+    }
+
+    .result-title span {
+      color: var(--accent);
+    }
+
+    .pair-code {
+      margin: 14px 0;
+
+      padding: 15px 10px;
+
+      border-radius: 13px;
+
+      text-align: center;
+
+      background: rgba(0,0,0,0.35);
+
+      border: 1px dashed rgba(0,234,255,0.30);
+
+      color: #ffffff;
+
+      font-size: 26px;
+      font-weight: 950;
+      letter-spacing: 5px;
+
+      text-shadow:
+        0 0 13px rgba(0,234,255,0.55);
+    }
+
+    .result-message {
+      color: var(--muted);
+      text-align: center;
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
+    .result-message strong {
+      color: #dffcff;
+    }
+
+    /* =========================================================
+       LOADER
+       ========================================================= */
+
+    .loader {
+      width: 23px;
+      height: 23px;
+
+      border-radius: 50%;
+
+      border: 3px solid rgba(255,255,255,0.18);
+      border-top-color: #071018;
+
+      animation: spin 0.75s linear infinite;
+
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* =========================================================
+       INFO
+       ========================================================= */
+
+    .steps {
+      margin-top: 18px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .step {
+      display: flex;
+      gap: 11px;
+      align-items: flex-start;
+
+      padding: 11px;
+
+      border-radius: 12px;
+
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.045);
+    }
+
+    .step-number {
+      min-width: 25px;
+      height: 25px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 8px;
+
+      color: var(--accent);
+      background: rgba(0,234,255,0.08);
+
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .step-text {
+      font-size: 10px;
+      color: #9299aa;
+      line-height: 1.55;
+    }
+
+    .step-text strong {
+      color: #e6eaf3;
+    }
+
+    /* =========================================================
+       SUPPORT
+       ========================================================= */
+
+    .support {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+
+      margin-top: 17px;
+
+      color: #aeb6c8;
+      font-size: 11px;
+
+      text-decoration: none;
+
+      transition: 0.2s ease;
+    }
+
+    .support:hover {
+      color: #ffffff;
+    }
+
+    .support span {
+      color: var(--accent);
+    }
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    .footer {
+      text-align: center;
+      margin-top: 17px;
+
+      color: #687084;
+      font-size: 9px;
+      letter-spacing: 1.1px;
+    }
+
+    .footer b {
+      color: #9ca6bb;
+    }
+
+    /* =========================================================
+       TOAST
+       ========================================================= */
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+
+      transform:
+        translate(-50%, 100px);
+
+      min-width: 260px;
+      max-width: calc(100% - 32px);
+
+      padding: 13px 15px;
+
+      border-radius: 13px;
+
+      background: rgba(8, 10, 17, 0.92);
+      border: 1px solid rgba(0,234,255,0.20);
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      box-shadow:
+        0 15px 45px rgba(0,0,0,0.4);
+
+      color: #e8edf8;
+      text-align: center;
+
+      font-size: 11px;
+      line-height: 1.4;
+
+      opacity: 0;
+
+      transition:
+        transform 0.3s ease,
+        opacity 0.3s ease;
+
+      z-index: 100;
+    }
+
+    .toast.show {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @media (max-width: 420px) {
+      .page {
+        padding: 25px 12px;
+      }
+
+      .logo-ring {
+        width: 112px;
+        height: 112px;
+      }
+
+      .logo {
+        width: 76px;
+        height: 76px;
+      }
+
+      .brand h1 {
+        font-size: 25px;
+      }
+
+      .card {
+        padding: 21px 15px 17px;
+        border-radius: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =======================================================
+       BACKGROUND VIDEO
+       ======================================================= -->
+
+  <video
+    id="backgroundVideo"
+    class="video-bg"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+  >
+    <source
+      src="https://files.catbox.moe/qmj6uz.mp4"
+      type="video/mp4"
+    >
+  </video>
+
+  <div class="video-overlay"></div>
+  <div class="scanlines"></div>
+
+  <!-- =======================================================
+       PARTICLES
+       ======================================================= -->
+
+  <div class="particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+
+  <!-- =======================================================
+       SOUND CONTROL
+       ======================================================= -->
+
+  <button
+    class="sound-btn"
+    id="soundButton"
+    aria-label="Enable background audio"
+    title="Enable background audio"
+  >
+    🔇
+  </button>
+
+  <!-- =======================================================
+       MAIN
+       ======================================================= -->
+
+  <main class="page">
+
+    <div class="wrapper">
+
+      <!-- BRAND -->
+
+      <section class="brand">
+
+        <div class="logo-ring">
+          <img
+            class="logo"
+            src="https://files.catbox.moe/qsrcvs.png"
+            alt="STINGER V6 Logo"
+          >
+        </div>
+
+        <h1>STINGER V6</h1>
+
+        <p>Secure WhatsApp WebPair</p>
+
+      </section>
+
+      <!-- CARD -->
+
+      <section class="card">
+
+        <!-- STATUS -->
+
+        <div class="status-line">
+
+          <div class="status-left">
+            <span class="status-dot"></span>
+            <span id="serverStatus">PAIR SERVER READY</span>
+          </div>
+
+          <span class="version">
+            V6.0.0
+          </span>
+
+        </div>
+
+        <!-- HEADING -->
+
+        <div class="heading">
+
+          <h2>Connect Your WhatsApp</h2>
+
+          <p>
+            Enter your WhatsApp number to generate a secure
+            pairing code for STINGER V6.
+          </p>
+
+        </div>
+
+        <!-- PHONE -->
+
+        <div class="field">
+
+          <label for="phone">
+            WhatsApp Number
+          </label>
+
+          <div class="input-wrap">
+
+            <span class="input-icon">📱</span>
+
+            <input
+              id="phone"
+              type="tel"
+              inputmode="numeric"
+              autocomplete="tel"
+              placeholder="263771234567"
+            >
+
+          </div>
+
+        </div>
+
+        <!-- PAIR BUTTON -->
+
+        <button
+          class="btn"
+          id="pairButton"
+          onclick="requestPairing()"
+        >
+          ⚡ GENERATE PAIRING CODE
+        </button>
+
+        <!-- RESULT -->
+
+        <div
+          class="result"
+          id="result"
+        >
+
+          <div class="result-title">
+            <span>●</span>
+            PAIRING CODE
+          </div>
+
+          <div
+            class="pair-code"
+            id="pairCode"
+          >
+            ----
+          </div>
+
+          <div
+            class="result-message"
+            id="resultMessage"
+          >
+            Waiting for pairing...
+          </div>
+
+          <button
+            class="btn cancel-btn"
+            id="cancelButton"
+            onclick="cancelPairing()"
+          >
+            ✕ CANCEL REQUEST
+          </button>
+
+        </div>
+
+        <!-- STEPS -->
+
+        <div class="steps">
+
+          <div class="step">
+
+            <div class="step-number">
+              01
+            </div>
+
+            <div class="step-text">
+              Open <strong>WhatsApp</strong> on the phone
+              you want to connect.
+            </div>
+
+          </div>
+
+          <div class="step">
+
+            <div class="step-number">
+              02
+            </div>
+
+            <div class="step-text">
+              Go to <strong>Linked Devices</strong> and
+              choose <strong>Link a Device</strong>.
+            </div>
+
+          </div>
+
+          <div class="step">
+
+            <div class="step-number">
+              03
+            </div>
+
+            <div class="step-text">
+              Select <strong>Link with phone number</strong>
+              and enter the generated code.
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- SUPPORT -->
+
+      <a
+        class="support"
+        href="https://whatsapp.com/channel/0029VbE25MNBlHpYK7C1G42j"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <span>◈</span>
+        Developer Support
+        <span>↗</span>
+      </a>
+
+      <!-- FOOTER -->
+
+      <div class="footer">
+        POWERED BY <b>STINGER V6</b> • DEVELOPED BY <b>ALPHA</b>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- TOAST -->
+
+  <div
+    class="toast"
+    id="toast"
+  ></div>
+
+  <script>
+    /* =========================================================
+       CONFIG
+       ========================================================= */
+
+    const API = "";
+
+    let currentNumber = "";
+    let pollingTimer = null;
+
+    /* =========================================================
+       BACKGROUND AUDIO
+       ========================================================= */
+
+    const video = document.getElementById("backgroundVideo");
+    const soundButton = document.getElementById("soundButton");
+
+    async function enableAudio() {
+      try {
+        video.muted = false;
+        video.volume = 1;
+
+        await video.play();
+
+        soundButton.textContent = "🔊";
+        soundButton.setAttribute(
+          "aria-label",
+          "Mute background audio"
+        );
+
+      } catch (error) {
+        /*
+         * Browsers can block autoplay with sound.
+         * The user can press the button again after interaction.
+         */
+
+        video.muted = true;
+
+        soundButton.textContent = "🔇";
+
+        showToast(
+          "Tap the sound button again to enable background audio."
+        );
+      }
+    }
+
+    soundButton.addEventListener(
+      "click",
+      async () => {
+
+        if (video.muted) {
+          await enableAudio();
+        } else {
+          video.muted = true;
+          soundButton.textContent = "🔇";
+        }
+
+      }
+    );
+
+    /*
+     * Try to start with audio.
+     * Browser autoplay policies may require user interaction.
+     */
+
+    window.addEventListener(
+      "load",
+      async () => {
+
+        try {
+          video.muted = false;
+          video.volume = 1;
+
+          await video.play();
+
+          soundButton.textContent = "🔊";
+
+        } catch (error) {
+
+          video.muted = true;
+
+          try {
+            await video.play();
+          } catch (_) {}
+
+          soundButton.textContent = "🔇";
+        }
+
+      }
+    );
+
+    /* =========================================================
+       TOAST
+       ========================================================= */
+
+    let toastTimer;
+
+    function showToast(message) {
+
+      const toast =
+        document.getElementById("toast");
+
+      toast.textContent = message;
+
+      toast.classList.add("show");
+
+      clearTimeout(toastTimer);
+
+      toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3500);
+    }
+
+    /* =========================================================
+       PHONE NORMALIZER
+       ========================================================= */
+
+    function normalizeNumber(value) {
+
+      let number =
+        String(value || "")
+          .replace(/\D/g, "");
+
+      /*
+       * Remove international dialing prefix if entered.
+       */
+
+      if (number.startsWith("00")) {
+        number = number.substring(2);
+      }
+
+      return number;
+    }
+
+    /* =========================================================
+       REQUEST PAIRING
+       ========================================================= */
+
+    async function requestPairing() {
+
+      const phone =
+        document
+          .getElementById("phone")
+          .value;
+
+      const number =
+        normalizeNumber(phone);
+
+      if (!number) {
+
+        showToast(
+          "Enter your WhatsApp number first."
+        );
+
+        return;
+      }
+
+      if (number.length < 8) {
+
+        showToast(
+          "Enter a valid WhatsApp number."
+        );
+
+        return;
+      }
+
+      currentNumber = number;
+
+      const button =
+        document.getElementById("pairButton");
+
+      const result =
+        document.getElementById("result");
+
+      const pairCode =
+        document.getElementById("pairCode");
+
+      const message =
+        document.getElementById("resultMessage");
+
+      const status =
+        document.getElementById("serverStatus");
+
+      button.disabled = true;
+
+      button.innerHTML =
+        '<div class="loader"></div>';
+
+      result.classList.add("show");
+
+      pairCode.textContent = "••••••••";
+
+      message.textContent =
+        "Initializing secure pairing request...";
+
+      status.textContent =
+        "CREATING PAIRING REQUEST";
+
+      try {
+
+        const response =
+          await fetch(
+            API + "/pair",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+                number: number
+              })
+            }
+          );
+
+        const data =
+          await response.json();
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.message ||
+            data.error ||
+            "Pairing request failed."
+          );
+        }
+
+        /*
+         * Pair.js may return code,
+         * pairingCode or status depending
+         * on implementation.
+         */
+
+        const code =
+          data.code ||
+          data.pairingCode ||
+          data.pairing_code;
+
+        if (code) {
+
+          pairCode.textContent =
+            String(code)
+              .toUpperCase();
+
+          message.innerHTML =
+            "Open WhatsApp → <strong>Linked Devices</strong> → " +
+            "<strong>Link with phone number</strong> " +
+            "and enter this code.";
+
+          status.textContent =
+            "WAITING FOR LINK";
+
+        } else {
+
+          pairCode.textContent =
+            "WAITING";
+
+          message.textContent =
+            data.message ||
+            "Pairing request created. Waiting for code...";
+
+          status.textContent =
+            "PAIRING REQUEST ACTIVE";
+        }
+
+        startPolling();
+
+      } catch (error) {
+
+        console.error(error);
+
+        result.classList.remove("show");
+
+        status.textContent =
+          "PAIR REQUEST FAILED";
+
+        showToast(
+          error.message ||
+          "Unable to create pairing request."
+        );
+
+      } finally {
+
+        button.disabled = false;
+
+        button.innerHTML =
+          "⚡ GENERATE PAIRING CODE";
+      }
+    }
+
+    /* =========================================================
+       STATUS POLLING
+       ========================================================= */
+
+    function startPolling() {
+
+      stopPolling();
+
+      checkPairingStatus();
+
+      pollingTimer =
+        setInterval(
+          checkPairingStatus,
+          3000
+        );
+    }
+
+    function stopPolling() {
+
+      if (pollingTimer) {
+
+        clearInterval(
+          pollingTimer
+        );
+
+        pollingTimer = null;
+      }
+    }
+
+    async function checkPairingStatus() {
+
+      if (!currentNumber) {
+        return;
+      }
+
+      try {
+
+        const response =
+          await fetch(
+            API +
+            "/pair/status/" +
+            encodeURIComponent(
+              currentNumber
+            ),
+            {
+              cache: "no-store"
+            }
+          );
+
+        if (!response.ok) {
+          return;
+        }
+
+        const data =
+          await response.json();
+
+        const status =
+          String(
+            data.status || ""
+          ).toLowerCase();
+
+        const pairCode =
+          data.code ||
+          data.pairingCode ||
+          data.pairing_code;
+
+        const message =
+          document
+            .getElementById(
+              "resultMessage"
+            );
+
+        const statusText =
+          document
+            .getElementById(
+              "serverStatus"
+            );
+
+        if (pairCode) {
+
+          document
+            .getElementById(
+              "pairCode"
+            )
+            .textContent =
+              String(pairCode)
+                .toUpperCase();
+        }
+
+        if (
+          status === "connected" ||
+          status === "success" ||
+          status === "paired"
+        ) {
+
+          stopPolling();
+
+          statusText.textContent =
+            "WHATSAPP CONNECTED";
+
+          message.innerHTML =
+            "✓ <strong>WhatsApp connected successfully.</strong><br>" +
+            "STINGER V6 is now ready.";
+
+          showToast(
+            "WhatsApp connected successfully!"
+          );
+
+          return;
+        }
+
+        if (
+          status === "expired" ||
+          status === "timeout"
+        ) {
+
+          stopPolling();
+
+          statusText.textContent =
+            "PAIRING EXPIRED";
+
+          message.textContent =
+            "This pairing request has expired. Generate a new code.";
+
+          return;
+        }
+
+        if (
+          status === "cancelled" ||
+          status === "canceled"
+        ) {
+
+          stopPolling();
+
+          statusText.textContent =
+            "PAIRING CANCELLED";
+
+          message.textContent =
+            "The pairing request was cancelled.";
+
+          return;
+        }
+
+        if (data.message) {
+          message.textContent =
+            data.message;
+        }
+
+      } catch (error) {
+
+        console.warn(
+          "Status check failed:",
+          error
+        );
+      }
+    }
+
+    /* =========================================================
+       CANCEL PAIRING
+       ========================================================= */
+
+    async function cancelPairing() {
+
+      if (!currentNumber) {
+        return;
+      }
+
+      try {
+
+        const response =
+          await fetch(
+            API + "/pair/cancel",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+                number: currentNumber
+              })
+            }
+          );
+
+        const data =
+          await response.json();
+
+        stopPolling();
+
+        document
+          .getElementById(
+            "serverStatus"
+          )
+          .textContent =
+          "PAIRING CANCELLED";
+
+        document
+          .getElementById(
+            "resultMessage"
+          )
+          .textContent =
+          data.message ||
+          "Pairing request cancelled.";
+
+        showToast(
+          "Pairing request cancelled."
+        );
+
+      } catch (error) {
+
+        showToast(
+          "Unable to cancel pairing request."
+        );
+      }
+    }
+
+    /* =========================================================
+       CLEANUP
+       ========================================================= */
+
+    window.addEventListener(
+      "beforeunload",
+      () => {
+        stopPolling();
+      }
+    );
+
+  </script>
+
+</body>
+</html>
