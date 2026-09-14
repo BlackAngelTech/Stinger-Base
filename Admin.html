@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
+
+  <meta name="theme-color" content="#05060a">
+
+  <title>STINGER V6 — Admin</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg: #03050a;
+      --panel: rgba(10, 13, 22, 0.78);
+      --panel2: rgba(16, 20, 32, 0.72);
+      --border: rgba(0, 234, 255, 0.16);
+      --cyan: #00eaff;
+      --purple: #8b4dff;
+      --green: #00ff9d;
+      --red: #ff3158;
+      --yellow: #ffd166;
+      --text: #f4f7ff;
+      --muted: #7e879c;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    /* =====================================================
+       BACKGROUND
+       ===================================================== */
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+
+      background:
+        radial-gradient(
+          circle at 15% 10%,
+          rgba(0, 234, 255, 0.10),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 85% 90%,
+          rgba(139, 77, 255, 0.10),
+          transparent 30%
+        ),
+        #03050a;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+
+      opacity: .08;
+
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent 0,
+          transparent 3px,
+          rgba(255,255,255,.04) 4px
+        );
+    }
+
+    /* =====================================================
+       LOGIN
+       ===================================================== */
+
+    .login-screen {
+      min-height: 100vh;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 25px;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 390px;
+
+      padding: 30px 22px;
+
+      border-radius: 25px;
+
+      background: var(--panel);
+
+      border: 1px solid var(--border);
+
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+
+      box-shadow:
+        0 30px 80px rgba(0,0,0,.45),
+        0 0 50px rgba(0,234,255,.04);
+
+      text-align: center;
+    }
+
+    .login-logo {
+      width: 92px;
+      height: 92px;
+
+      object-fit: contain;
+
+      margin-bottom: 12px;
+
+      filter:
+        drop-shadow(0 0 15px rgba(0,234,255,.55));
+
+      animation:
+        logoFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes logoFloat {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-7px);
+      }
+    }
+
+    .login-box h1 {
+      font-size: 23px;
+      letter-spacing: 2px;
+    }
+
+    .login-box .subtitle {
+      color: var(--muted);
+      font-size: 11px;
+      margin: 7px 0 24px;
+      letter-spacing: 1px;
+    }
+
+    .login-input {
+      width: 100%;
+      height: 53px;
+
+      padding: 0 15px;
+
+      border-radius: 14px;
+
+      background: rgba(0,0,0,.28);
+
+      color: white;
+
+      border: 1px solid rgba(255,255,255,.08);
+
+      outline: none;
+
+      font-size: 14px;
+
+      transition: .25s;
+    }
+
+    .login-input:focus {
+      border-color: var(--cyan);
+
+      box-shadow:
+        0 0 0 3px rgba(0,234,255,.06);
+    }
+
+    .login-button {
+      width: 100%;
+      height: 53px;
+
+      margin-top: 13px;
+
+      border: 0;
+      border-radius: 14px;
+
+      background:
+        linear-gradient(
+          100deg,
+          var(--cyan),
+          #8df6ff,
+          var(--cyan)
+        );
+
+      background-size: 200% auto;
+
+      color: #02060a;
+
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1px;
+
+      cursor: pointer;
+
+      animation:
+        buttonFlow 4s linear infinite;
+    }
+
+    @keyframes buttonFlow {
+      to {
+        background-position: 200% center;
+      }
+    }
+
+    .login-error {
+      min-height: 18px;
+      margin-top: 12px;
+
+      color: var(--red);
+
+      font-size: 10px;
+    }
+
+    /* =====================================================
+       APP
+       ===================================================== */
+
+    .app {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .app.active {
+      display: flex;
+    }
+
+    /* =====================================================
+       SIDEBAR
+       ===================================================== */
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+
+      width: 245px;
+
+      padding: 20px 13px;
+
+      background:
+        rgba(5, 8, 15, .94);
+
+      border-right:
+        1px solid rgba(0,234,255,.10);
+
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+
+      z-index: 30;
+
+      transition: .3s ease;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      padding: 7px 8px 20px;
+    }
+
+    .brand img {
+      width: 38px;
+      height: 38px;
+
+      object-fit: contain;
+
+      filter:
+        drop-shadow(0 0 10px rgba(0,234,255,.45));
+    }
+
+    .brand strong {
+      font-size: 14px;
+      letter-spacing: 1.5px;
+    }
+
+    .brand small {
+      display: block;
+      color: var(--cyan);
+      font-size: 8px;
+      margin-top: 3px;
+      letter-spacing: 1px;
+    }
+
+    .nav {
+      display: grid;
+      gap: 4px;
+    }
+
+    .nav-button {
+      width: 100%;
+
+      display: flex;
+      align-items: center;
+      gap: 11px;
+
+      padding: 11px 12px;
+
+      border: 0;
+      border-radius: 11px;
+
+      color: #8d96aa;
+      background: transparent;
+
+      text-align: left;
+
+      font-size: 11px;
+      font-weight: 700;
+
+      cursor: pointer;
+
+      transition: .2s;
+    }
+
+    .nav-button:hover,
+    .nav-button.active {
+      color: white;
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(0,234,255,.10),
+          rgba(0,234,255,.025)
+        );
+
+      box-shadow:
+        inset 2px 0 var(--cyan);
+    }
+
+    .nav-icon {
+      width: 22px;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .sidebar-status {
+      position: absolute;
+      left: 13px;
+      right: 13px;
+      bottom: 18px;
+
+      padding: 12px;
+
+      border-radius: 13px;
+
+      background: rgba(0,255,157,.045);
+
+      border: 1px solid rgba(0,255,157,.12);
+    }
+
+    .online-dot {
+      display: inline-block;
+
+      width: 7px;
+      height: 7px;
+
+      border-radius: 50%;
+
+      background: var(--green);
+
+      box-shadow: 0 0 10px var(--green);
+
+      margin-right: 6px;
+    }
+
+    .sidebar-status span {
+      color: var(--green);
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    /* =====================================================
+       MAIN
+       ===================================================== */
+
+    .main {
+      width: 100%;
+      margin-left: 245px;
+
+      padding: 23px;
+    }
+
+    .topbar {
+      min-height: 52px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 12px;
+
+      margin-bottom: 20px;
+    }
+
+    .topbar h2 {
+      font-size: 20px;
+    }
+
+    .topbar p {
+      color: var(--muted);
+      font-size: 10px;
+      margin-top: 4px;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .top-button {
+      width: 42px;
+      height: 42px;
+
+      border-radius: 12px;
+
+      color: white;
+
+      background: var(--panel);
+
+      border: 1px solid var(--border);
+
+      cursor: pointer;
+
+      font-size: 16px;
+    }
+
+    /* =====================================================
+       GRID
+       ===================================================== */
+
+    .stats {
+      display: grid;
+
+      grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+      gap: 12px;
+
+      margin-bottom: 13px;
+    }
+
+    .stat {
+      padding: 17px;
+
+      min-height: 105px;
+
+      border-radius: 17px;
+
+      background: var(--panel);
+
+      border: 1px solid var(--border);
+
+      backdrop-filter: blur(18px);
+
+      transition: .2s;
+    }
+
+    .stat:hover {
+      transform: translateY(-2px);
+
+      border-color:
+        rgba(0,234,255,.28);
+    }
+
+    .stat-head {
+      display: flex;
+      justify-content: space-between;
+
+      color: var(--muted);
+
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .stat-icon {
+      font-size: 16px;
+    }
+
+    .stat-value {
+      margin-top: 12px;
+
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .stat-change {
+      margin-top: 4px;
+
+      color: var(--green);
+
+      font-size: 9px;
+    }
+
+    /* =====================================================
+       CONTENT GRID
+       ===================================================== */
+
+    .content-grid {
+      display: grid;
+
+      grid-template-columns:
+        minmax(0, 1.7fr)
+        minmax(280px, 1fr);
+
+      gap: 13px;
+    }
+
+    .panel {
+      padding: 18px;
+
+      border-radius: 18px;
+
+      background: var(--panel);
+
+      border: 1px solid var(--border);
+
+      backdrop-filter: blur(18px);
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      margin-bottom: 16px;
+    }
+
+    .panel-title h3 {
+      font-size: 13px;
+    }
+
+    .panel-title span {
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    /* =====================================================
+       BOT STATUS
+       ===================================================== */
+
+    .bot-status {
+      display: grid;
+      gap: 8px;
+    }
+
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      padding: 11px 12px;
+
+      border-radius: 11px;
+
+      background: rgba(255,255,255,.025);
+
+      border: 1px solid rgba(255,255,255,.045);
+    }
+
+    .status-item span:first-child {
+      color: #8d96aa;
+      font-size: 10px;
+    }
+
+    .status-item span:last-child {
+      color: #e9eef9;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .good {
+      color: var(--green) !important;
+    }
+
+    .bad {
+      color: var(--red) !important;
+    }
+
+    /* =====================================================
+       QUICK ACTIONS
+       ===================================================== */
+
+    .actions {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+      gap: 9px;
+    }
+
+    .action {
+      min-height: 70px;
+
+      padding: 12px;
+
+      border-radius: 13px;
+
+      color: #e9eef9;
+
+      background:
+        rgba(255,255,255,.025);
+
+      border:
+        1px solid rgba(255,255,255,.055);
+
+      cursor: pointer;
+
+      text-align: left;
+
+      transition: .2s;
+    }
+
+    .action:hover {
+      transform: translateY(-2px);
+
+      border-color:
+        rgba(0,234,255,.24);
+    }
+
+    .action-icon {
+      font-size: 18px;
+    }
+
+    .action strong {
+      display: block;
+
+      margin-top: 7px;
+
+      font-size: 10px;
+    }
+
+    .action small {
+      display: block;
+
+      margin-top: 3px;
+
+      color: var(--muted);
+
+      font-size: 8px;
+    }
+
+    /* =====================================================
+       ACTIVITY
+       ===================================================== */
+
+    .activity {
+      display: grid;
+      gap: 8px;
+    }
+
+    .activity-item {
+      display: flex;
+      gap: 10px;
+
+      padding: 10px;
+
+      border-radius: 11px;
+
+      background: rgba(255,255,255,.022);
+    }
+
+    .activity-icon {
+      min-width: 29px;
+      height: 29px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 9px;
+
+      background: rgba(0,234,255,.07);
+
+      color: var(--cyan);
+    }
+
+    .activity-text {
+      min-width: 0;
+    }
+
+    .activity-text strong {
+      display: block;
+
+      font-size: 9px;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .activity-text small {
+      display: block;
+
+      color: var(--muted);
+
+      font-size: 8px;
+
+      margin-top: 3px;
+    }
+
+    /* =====================================================
+       MOBILE MENU
+       ===================================================== */
+
+    .mobile-menu {
+      display: none;
+
+      width: 42px;
+      height: 42px;
+
+      border: 1px solid var(--border);
+      border-radius: 12px;
+
+      background: var(--panel);
+
+      color: white;
+
+      font-size: 18px;
+    }
+
+    /* =====================================================
+       RESPONSIVE
+       ===================================================== */
+
+    @media (max-width: 1050px) {
+
+      .stats {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 15px;
+      }
+
+      .mobile-menu {
+        display: block;
+      }
+
+      .topbar {
+        align-items: flex-start;
+      }
+
+      .topbar-left {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .stats {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+
+        gap: 9px;
+      }
+
+      .stat {
+        min-height: 95px;
+        padding: 14px;
+      }
+    }
+
+    @media (max-width: 430px) {
+
+      .stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .stat-value {
+        font-size: 18px;
+      }
+
+      .main {
+        padding: 11px;
+      }
+
+      .panel {
+        padding: 14px;
+      }
+
+      .actions {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* =====================================================
+       TOAST
+       ===================================================== */
+
+    .toast {
+      position: fixed;
+
+      left: 50%;
+      bottom: 20px;
+
+      transform:
+        translate(-50%, 90px);
+
+      opacity: 0;
+
+      z-index: 100;
+
+      width: min(360px, calc(100% - 30px));
+
+      padding: 13px 15px;
+
+      border-radius: 13px;
+
+      background:
+        rgba(7,10,17,.94);
+
+      border:
+        1px solid rgba(0,234,255,.18);
+
+      color: #eaf0fb;
+
+      font-size: 10px;
+
+      text-align: center;
+
+      transition: .3s ease;
+    }
+
+    .toast.show {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =====================================================
+       LOGIN
+       ===================================================== -->
+
+  <section
+    class="login-screen"
+    id="loginScreen"
+  >
+
+    <div class="login-box">
+
+      <img
+        class="login-logo"
+        src="https://files.catbox.moe/qsrcvs.png"
+        alt="STINGER V6"
+      >
+
+      <h1>STINGER V6</h1>
+
+      <div class="subtitle">
+        ADMIN COMMAND CENTER
+      </div>
+
+      <input
+        class="login-input"
+        id="adminPassword"
+        type="password"
+        placeholder="Enter administrator password"
+        autocomplete="current-password"
+      >
+
+      <button
+        class="login-button"
+        id="loginButton"
+        onclick="login()"
+      >
+        🔐 ACCESS COMMAND CENTER
+      </button>
+
+      <div
+        class="login-error"
+        id="loginError"
+      ></div>
+
+    </div>
+
+  </section>
+
+  <!-- =====================================================
+       APPLICATION
+       ===================================================== -->
+
+  <div
+    class="app"
+    id="app"
+  >
+
+    <!-- SIDEBAR -->
+
+    <aside
+      class="sidebar"
+      id="sidebar"
+    >
+
+      <div class="brand">
+
+        <img
+          src="https://files.catbox.moe/qsrcvs.png"
+          alt="Logo"
+        >
+
+        <div>
+          <strong>STINGER V6</strong>
+          <small>COMMAND CENTER</small>
+        </div>
+
+      </div>
+
+      <nav class="nav">
+
+        <button class="nav-button active">
+          <span class="nav-icon">🏠</span>
+          Dashboard
+        </button>
+
+        <button class="nav-button">
+          <span class="nav-icon">📊</span>
+          Analytics
+        </button>
+
+        <button class="nav-button">
+          <span class="nav-icon">👥</span>
+          Users
+        </button>
+
+        <button class="nav-button">
+          <span class="nav-icon">📡</span>
+          Connections
+        </button>
+
+        <button class="nav-button">
+          <span class="nav-icon">📢</span>
+          Broadcast
+        </button>
+
+        <button class="nav-button">
+          <span class="nav-icon">📅</span>
+          Scheduler
+        </button>
+
+        <button class="nav-button">
+          <span class="nav-icon">🧩</span>
+          Plugins
+        </button>
+
+        <button class="nav-button">
+          <span class="nav-icon">📝</span>
+          Logs
+        </button>
+
+        <button class="nav-button">
+          <span class="nav-icon">🔔</span>
+          Alerts
+        </button>
+
+        <button class="nav-button">
+          <span class="nav-icon">🌐</span>
+          WebPair
+        </button>
+
+        <button class="nav-button">
+          <span class="nav-icon">🗄️</span>
+          Database
+        </button>
+
+        <button class="nav-button">
+          <span class="nav-icon">⚙️</span>
+          Bot Settings
+        </button>
+
+        <button class="nav-button">
+          <span class="nav-icon">🛠️</span>
+          System
+        </button>
+
+        <button class="nav-button">
+          <span class="nav-icon">🛡️</span>
+          Security
+        </button>
+
+        <button class="nav-button">
+          <span class="nav-icon">🖥️</span>
+          Console
+        </button>
+
+      </nav>
+
+      <div class="sidebar-status">
+        <span>
+          <i class="online-dot"></i>
+          BOT ONLINE
+        </span>
+      </div>
+
+    </aside>
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+      <header class="topbar">
+
+        <div class="topbar-left">
+
+          <button
+            class="mobile-menu"
+            onclick="toggleSidebar()"
+          >
+            ☰
+          </button>
+
+          <div>
+            <h2>Dashboard</h2>
+
+            <p>
+              STINGER V6 system command center
+            </p>
+          </div>
+
+        </div>
+
+        <div class="top-actions">
+
+          <button
+            class="top-button"
+            onclick="refreshDashboard()"
+            title="Refresh"
+          >
+            ↻
+          </button>
+
+          <button
+            class="top-button"
+            onclick="logout()"
+            title="Logout"
+          >
+            ⎋
+          </button>
+
+        </div>
+
+      </header>
+
+      <!-- ===================================================
+           STATISTICS
+           =================================================== -->
+
+      <section class="stats">
+
+        <div class="stat">
+
+          <div class="stat-head">
+            <span>BOT STATUS</span>
+            <span class="stat-icon">🟢</span>
+          </div>
+
+          <div
+            class="stat-value good"
+            id="botStatus"
+          >
+            ONLINE
+          </div>
+
+          <div class="stat-change">
+            ● Connection active
+          </div>
+
+        </div>
+
+        <div class="stat">
+
+          <div class="stat-head">
+            <span>UPTIME</span>
+            <span class="stat-icon">⏱️</span>
+          </div>
+
+          <div
+            class="stat-value"
+            id="uptime"
+          >
+            00:00:00
+          </div>
+
+          <div class="stat-change">
+            ● Running normally
+          </div>
+
+        </div>
+
+        <div class="stat">
+
+          <div class="stat-head">
+            <span>USERS</span>
+            <span class="stat-icon">👥</span>
+          </div>
+
+          <div
+            class="stat-value"
+            id="userCount"
+          >
+            0
+          </div>
+
+          <div class="stat-change">
+            ● Registered users
+          </div>
+
+        </div>
+
+        <div class="stat">
+
+          <div class="stat-head">
+            <span>PLUGINS</span>
+            <span class="stat-icon">🧩</span>
+          </div>
+
+          <div
+            class="stat-value"
+            id="pluginCount"
+          >
+            0
+          </div>
+
+          <div class="stat-change">
+            ● Loaded modules
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ===================================================
+           CONTENT
+           =================================================== -->
+
+      <section class="content-grid">
+
+        <!-- LEFT -->
+
+        <div>
+
+          <!-- SYSTEM -->
+
+          <div class="panel">
+
+            <div class="panel-title">
+
+              <h3>⚡ System Overview</h3>
+
+              <span id="lastUpdated">
+                Updating...
+              </span>
+
+            </div>
+
+            <div class="bot-status">
+
+              <div class="status-item">
+                <span>Bot Name</span>
+                <span id="botName">
+                  STINGER VERSION 6
+                </span>
+              </div>
+
+              <div class="status-item">
+                <span>Version</span>
+                <span id="botVersion">
+                  6.0.0
+                </span>
+              </div>
+
+              <div class="status-item">
+                <span>Developer</span>
+                <span>
+                  Alpha
+                </span>
+              </div>
+
+              <div class="status-item">
+                <span>Runtime</span>
+                <span id="runtime">
+                  Node.js
+                </span>
+              </div>
+
+              <div class="status-item">
+                <span>Database</span>
+                <span
+                  class="good"
+                  id="databaseStatus"
+                >
+                  CONNECTED
+                </span>
+              </div>
+
+              <div class="status-item">
+                <span>WhatsApp</span>
+                <span
+                  class="good"
+                  id="whatsappStatus"
+                >
+                  CONNECTED
+                </span>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- QUICK ACTIONS -->
+
+          <div
+            class="panel"
+            style="margin-top:13px;"
+          >
+
+            <div class="panel-title">
+              <h3>🛠️ Quick Controls</h3>
+              <span>Admin actions</span>
+            </div>
+
+            <div class="actions">
+
+              <button
+                class="action"
+                onclick="adminAction('reloadPlugins')"
+              >
+                <div class="action-icon">🧩</div>
+                <strong>Reload Plugins</strong>
+                <small>Refresh loaded plugins</small>
+              </button>
+
+              <button
+                class="action"
+                onclick="adminAction('reconnect')"
+              >
+                <div class="action-icon">📡</div>
+                <strong>Reconnect Bot</strong>
+                <small>Restart WhatsApp connection</small>
+              </button>
+
+              <button
+                class="action"
+                onclick="adminAction('refreshDatabase')"
+              >
+                <div class="action-icon">🗄️</div>
+                <strong>Refresh Database</strong>
+                <small>Validate JSON storage</small>
+              </button>
+
+              <button
+                class="action"
+                onclick="adminAction('clearCache')"
+              >
+                <div class="action-icon">🧹</div>
+                <strong>Clear Cache</strong>
+                <small>Remove temporary files</small>
+              </button>
+
+              <button
+                class="action"
+                onclick="adminAction('restart')"
+              >
+                <div class="action-icon">🔄</div>
+                <strong>Restart Bot</strong>
+                <small>Gracefully restart service</small>
+              </button>
+
+              <button
+                class="action"
+                onclick="adminAction('health')"
+              >
+                <div class="action-icon">❤️</div>
+                <strong>Health Check</strong>
+                <small>Test system components</small>
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div>
+
+          <!-- ACTIVITY -->
+
+          <div class="panel">
+
+            <div class="panel-title">
+
+              <h3>📡 Live Activity</h3>
+
+              <span id="activityState">
+                LIVE
+              </span>
+
+            </div>
+
+            <div
+              class="activity"
+              id="activityList"
+            >
+
+              <div class="activity-item">
+
+                <div class="activity-icon">
+                  ✓
+                </div>
+
+                <div class="activity-text">
+
+                  <strong>
+                    Admin dashboard initialized
+                  </strong>
+
+                  <small>
+                    Just now
+                  </small>
+
+                </div>
+
+              </div>
+
+              <div class="activity-item">
+
+                <div class="activity-icon">
+                  ⚡
+                </div>
+
+                <div class="activity-text">
+
+                  <strong>
+                    Waiting for live events
+                  </strong>
+
+                  <small>
+                    Monitoring system
+                  </small>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- SERVER -->
+
+          <div
+            class="panel"
+            style="margin-top:13px;"
+          >
+
+            <div class="panel-title">
+              <h3>🖥️ Server</h3>
+              <span>Live</span>
+            </div>
+
+            <div class="bot-status">
+
+              <div class="status-item">
+                <span>CPU</span>
+                <span id="cpuUsage">
+                  --
+                </span>
+              </div>
+
+              <div class="status-item">
+                <span>Memory</span>
+                <span id="memoryUsage">
+                  --
+                </span>
+              </div>
+
+              <div class="status-item">
+                <span>Node</span>
+                <span id="nodeVersion">
+                  --
+                </span>
+              </div>
+
+              <div class="status-item">
+                <span>Platform</span>
+                <span id="platform">
+                  --
+                </span>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <div
+    class="toast"
+    id="toast"
+  ></div>
+
+  <!-- =====================================================
+       ADMIN SCRIPT
+       ===================================================== -->
+
+  <script src="/Admin.js"></script>
+
+  <script>
+
+    function toggleSidebar() {
+
+      document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+    }
+
+    function showToast(message) {
+
+      const toast =
+        document.getElementById("toast");
+
+      toast.textContent = message;
+
+      toast.classList.add("show");
+
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3000);
+    }
+
+    /*
+     * These functions intentionally remain lightweight.
+     * Admin.js will provide the authenticated API logic.
+     */
+
+    function refreshDashboard() {
+
+      if (
+        typeof window.loadDashboard ===
+        "function"
+      ) {
+        window.loadDashboard();
+      } else {
+        showToast(
+          "Refreshing dashboard..."
+        );
+      }
+    }
+
+    function adminAction(action) {
+
+      if (
+        typeof window.performAdminAction ===
+        "function"
+      ) {
+
+        window.performAdminAction(action);
+
+        return;
+      }
+
+      showToast(
+        "Admin action: " + action
+      );
+    }
+
+  </script>
+
+</body>
+</html>
