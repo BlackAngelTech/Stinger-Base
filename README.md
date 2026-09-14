@@ -10,8 +10,7 @@
 
 <img
   src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=700&size=28&duration=2500&pause=700&color=00F7FF&center=true&vCenter=true&width=700&lines=%F0%9F%90%9D+STINGER+VERSION+6;%E2%9A%A1+NEXT+GENERATION+WHATSAPP+BOT;%F0%9F%8C%90+WEBPAIR+%2B+ADMIN+DASHBOARD;%F0%9F%A7%A9+MODULAR+PLUGIN+SYSTEM;%F0%9F%94%A5+BUILT+BY+CALLMΕ_ALPHA"
-  alt="Typing animation"
->
+  alt="Typing animation">
 
 <br>
 
