@@ -1,0 +1,76 @@
+version: 2
+
+builds:
+  - src: index.js
+    use: "@vercel/node"
+    config:
+      maxLambdaSize: "50mb"
+
+routes:
+  - src: /health
+    dest: /index.js
+
+  - src: /api/(.*)
+    dest: /index.js
+
+  - src: /pair
+    dest: /Pair.html
+
+  - src: /admin
+    dest: /Admin.html
+
+  - src: /Admin.js
+    dest: /Admin.js
+
+  - src: /Admin.css
+    dest: /Admin.css
+
+  - src: /menu.png
+    dest: /menu.png
+
+  - src: /(.*)
+    dest: /index.js
+
+env:
+  NODE_ENV:
+    value: production
+    type: plain
+
+  BOT_NAME:
+    value: STINGER VERSION 6
+    type: plain
+
+  BOT_VERSION:
+    value: 6.0.0
+    type: plain
+
+  DEVELOPER:
+    value: Alpha
+    type: plain
+
+  COUNTRY:
+    value: Zimbabwe 🇿🇼
+    type: plain
+
+  PREFIX:
+    value: .
+    type: plain
+
+  PAIR_ENABLED:
+    value: true
+    type: plain
+
+  PAIR_TIMEOUT:
+    value: 120000
+    type: plain
+
+  LOG_LEVEL:
+    value: info
+    type: plain
+
+  TZ:
+    value: Africa/Harare
+    type: plain
+
+  ADMIN_PASSWORD_HASH:
+    type: secret
