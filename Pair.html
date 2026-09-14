@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050505">
+<meta name="description" content="STINGER VERSION 6 WhatsApp WebPair">
+<title>STINGER V6 • WebPair</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+:root{
+    --bg:#030303;
+    --card:rgba(14,14,18,.78);
+    --card2:rgba(20,20,25,.9);
+    --border:rgba(255,255,255,.09);
+    --text:#fff;
+    --muted:#96969f;
+    --accent:#ff1744;
+    --accent2:#ff4d6d;
+    --green:#00e676;
+    --yellow:#ffd740;
+    --danger:#ff1744;
+    --shadow:0 25px 80px rgba(0,0,0,.55);
+}
+
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(circle at 50% 0%,rgba(255,23,68,.18),transparent 35%),
+        radial-gradient(circle at 0% 100%,rgba(255,23,68,.08),transparent 30%),
+        var(--bg);
+    color:var(--text);
+    font-family:Arial,Helvetica,sans-serif;
+    overflow-x:hidden;
+}
+
+/* =========================================================
+   BACKGROUND VIDEO
+========================================================= */
+
+.bg-video{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:-3;
+    opacity:.16;
+    filter:saturate(1.2) contrast(1.1);
+}
+
+.overlay{
+    position:fixed;
+    inset:0;
+    z-index:-2;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,.82),
+            rgba(0,0,0,.93)
+        );
+}
+
+.scanlines{
+    pointer-events:none;
+    position:fixed;
+    inset:0;
+    z-index:20;
+    opacity:.035;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            transparent 0,
+            transparent 3px,
+            #fff 4px
+        );
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header{
+    width:100%;
+    padding:18px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:relative;
+    z-index:5;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.brand img{
+    width:45px;
+    height:45px;
+    border-radius:14px;
+    object-fit:cover;
+    border:1px solid rgba(255,23,68,.5);
+    box-shadow:
+        0 0 20px rgba(255,23,68,.25);
+}
+
+.brand-text strong{
+    display:block;
+    font-size:14px;
+    letter-spacing:1.7px;
+}
+
+.brand-text span{
+    display:block;
+    margin-top:3px;
+    font-size:10px;
+    color:var(--muted);
+    letter-spacing:1px;
+}
+
+.online{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    padding:8px 11px;
+    border-radius:30px;
+    background:rgba(0,230,118,.07);
+    border:1px solid rgba(0,230,118,.18);
+    color:#8affb9;
+    font-size:10px;
+    font-weight:bold;
+}
+
+.online-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 10px var(--green);
+    animation:pulse 1.5s infinite;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.container{
+    width:min(520px,calc(100% - 28px));
+    margin:10px auto 40px;
+}
+
+.hero{
+    text-align:center;
+    padding:20px 10px 22px;
+}
+
+.logo{
+    width:92px;
+    height:92px;
+    object-fit:cover;
+    border-radius:27px;
+    border:1px solid rgba(255,23,68,.45);
+    box-shadow:
+        0 0 0 7px rgba(255,23,68,.035),
+        0 0 45px rgba(255,23,68,.22);
+    animation:float 4s ease-in-out infinite;
+}
+
+.hero h1{
+    margin-top:20px;
+    font-size:27px;
+    letter-spacing:3px;
+    font-weight:900;
+}
+
+.hero h1 span{
+    color:var(--accent);
+}
+
+.hero p{
+    margin:9px auto 0;
+    max-width:390px;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.6;
+}
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.card{
+    position:relative;
+    overflow:hidden;
+    padding:20px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:25px;
+    box-shadow:var(--shadow);
+    backdrop-filter:blur(22px);
+    -webkit-backdrop-filter:blur(22px);
+}
+
+.card::before{
+    content:"";
+    position:absolute;
+    width:180px;
+    height:180px;
+    top:-120px;
+    right:-90px;
+    background:var(--accent);
+    filter:blur(80px);
+    opacity:.11;
+    pointer-events:none;
+}
+
+.card-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:1px;
+    margin-bottom:16px;
+}
+
+.card-title .icon{
+    width:34px;
+    height:34px;
+    display:grid;
+    place-items:center;
+    border-radius:11px;
+    background:rgba(255,23,68,.1);
+    border:1px solid rgba(255,23,68,.17);
+}
+
+/* =========================================================
+   INPUT
+========================================================= */
+
+.label{
+    display:block;
+    color:#aaaab3;
+    font-size:10px;
+    font-weight:bold;
+    letter-spacing:1.2px;
+    margin:0 0 8px 3px;
+    text-transform:uppercase;
+}
+
+.input-wrap{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    padding:4px;
+    background:rgba(255,255,255,.045);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:15px;
+    transition:.25s;
+}
+
+.input-wrap:focus-within{
+    border-color:rgba(255,23,68,.55);
+    box-shadow:0 0 0 4px rgba(255,23,68,.06);
+}
+
+.prefix{
+    padding-left:11px;
+    color:#ff7189;
+    font-weight:800;
+    font-size:13px;
+}
+
+input{
+    flex:1;
+    min-width:0;
+    border:0;
+    outline:0;
+    background:transparent;
+    color:white;
+    padding:13px 8px;
+    font-size:15px;
+    letter-spacing:1px;
+}
+
+input::placeholder{
+    color:#66666e;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn{
+    width:100%;
+    border:0;
+    outline:0;
+    cursor:pointer;
+    border-radius:14px;
+    padding:14px;
+    font-weight:900;
+    letter-spacing:1px;
+    transition:.2s;
+}
+
+.btn:active{
+    transform:scale(.97);
+}
+
+.primary{
+    margin-top:13px;
+    color:#fff;
+    background:
+        linear-gradient(
+            135deg,
+            #ff1744,
+            #c90032
+        );
+    box-shadow:
+        0 12px 30px rgba(255,23,68,.18);
+}
+
+.primary:hover{
+    box-shadow:
+        0 15px 38px rgba(255,23,68,.3);
+    transform:translateY(-1px);
+}
+
+.primary.loading{
+    opacity:.65;
+    pointer-events:none;
+}
+
+.secondary{
+    background:rgba(255,255,255,.055);
+    color:#ddd;
+    border:1px solid rgba(255,255,255,.08);
+}
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-box{
+    display:none;
+    margin-top:17px;
+    padding:15px;
+    border-radius:17px;
+    background:rgba(255,255,255,.035);
+    border:1px solid rgba(255,255,255,.07);
+}
+
+.status-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.status-label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.status-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--yellow);
+    box-shadow:0 0 10px var(--yellow);
+}
+
+.status-dot.success{
+    background:var(--green);
+    box-shadow:0 0 10px var(--green);
+}
+
+.status-dot.error{
+    background:var(--danger);
+    box-shadow:0 0 10px var(--danger);
+}
+
+.status-text{
+    color:#aaaab3;
+    font-size:10px;
+}
+
+/* =========================================================
+   CODE CARD
+========================================================= */
+
+.code-card{
+    display:none;
+    margin-top:15px;
+    padding:18px;
+    border-radius:19px;
+    text-align:center;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,23,68,.11),
+            rgba(255,255,255,.025)
+        );
+    border:1px solid rgba(255,23,68,.2);
+}
+
+.code-title{
+    font-size:10px;
+    color:#aaaab3;
+    letter-spacing:1.5px;
+    font-weight:bold;
+}
+
+.code{
+    margin:12px 0;
+    font-size:27px;
+    letter-spacing:5px;
+    font-weight:1000;
+    color:#fff;
+    text-shadow:0 0 20px rgba(255,23,68,.35);
+    user-select:all;
+}
+
+.code-buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.copy-btn,
+.reset-btn{
+    border:0;
+    padding:11px;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:11px;
+    font-weight:bold;
+    transition:.2s;
+}
+
+.copy-btn{
+    background:#fff;
+    color:#080808;
+}
+
+.reset-btn{
+    color:#ddd;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.copy-btn:active,
+.reset-btn:active{
+    transform:scale(.96);
+}
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.timer{
+    display:none;
+    margin-top:14px;
+}
+
+.timer-row{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:7px;
+    color:#777780;
+    font-size:9px;
+}
+
+.progress{
+    height:4px;
+    background:rgba(255,255,255,.08);
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    width:100%;
+    background:var(--accent);
+    border-radius:20px;
+    transition:width 1s linear;
+}
+
+/* =========================================================
+   INSTRUCTIONS
+========================================================= */
+
+.steps{
+    margin-top:17px;
+    display:grid;
+    gap:9px;
+}
+
+.step{
+    display:flex;
+    gap:11px;
+    padding:11px;
+    border-radius:14px;
+    background:rgba(255,255,255,.025);
+    border:1px solid rgba(255,255,255,.05);
+}
+
+.step-number{
+    flex:none;
+    width:25px;
+    height:25px;
+    display:grid;
+    place-items:center;
+    border-radius:9px;
+    background:rgba(255,23,68,.11);
+    color:#ff5873;
+    font-size:10px;
+    font-weight:900;
+}
+
+.step strong{
+    display:block;
+    font-size:11px;
+    margin-bottom:3px;
+}
+
+.step span{
+    color:#777780;
+    font-size:9px;
+    line-height:1.5;
+}
+
+/* =========================================================
+   INFO GRID
+========================================================= */
+
+.info-grid{
+    margin-top:12px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+}
+
+.info{
+    padding:12px;
+    border-radius:14px;
+    background:rgba(255,255,255,.025);
+    border:1px solid rgba(255,255,255,.05);
+}
+
+.info small{
+    color:#686871;
+    font-size:8px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.info strong{
+    display:block;
+    margin-top:5px;
+    font-size:11px;
+}
+
+/* =========================================================
+   SUPPORT
+========================================================= */
+
+.support{
+    margin-top:12px;
+    display:block;
+    text-align:center;
+    text-decoration:none;
+    color:#ff758c;
+    font-size:10px;
+    padding:12px;
+    border-radius:13px;
+    background:rgba(255,23,68,.055);
+    border:1px solid rgba(255,23,68,.1);
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer{
+    text-align:center;
+    padding:20px 10px 5px;
+    color:#56565e;
+    font-size:9px;
+    line-height:1.7;
+}
+
+.footer b{
+    color:#888891;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:25px;
+    transform:translate(-50%,20px);
+    opacity:0;
+    pointer-events:none;
+    z-index:100;
+    width:min(380px,calc(100% - 30px));
+    padding:13px 15px;
+    border-radius:14px;
+    background:#16161b;
+    border:1px solid rgba(255,255,255,.1);
+    box-shadow:0 15px 50px rgba(0,0,0,.5);
+    text-align:center;
+    font-size:11px;
+    transition:.3s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+.toast.success{
+    border-color:rgba(0,230,118,.25);
+}
+
+.toast.error{
+    border-color:rgba(255,23,68,.3);
+}
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes pulse{
+    50%{opacity:.4;transform:scale(.7)}
+}
+
+@keyframes float{
+    50%{transform:translateY(-5px)}
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg)}
+}
+
+.spinner{
+    display:inline-block;
+    width:14px;
+    height:14px;
+    margin-right:7px;
+    vertical-align:-2px;
+    border:2px solid rgba(255,255,255,.25);
+    border-top-color:white;
+    border-radius:50%;
+    animation:spin .7s linear infinite;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:430px){
+
+    .header{
+        padding:15px 14px;
+    }
+
+    .brand img{
+        width:39px;
+        height:39px;
+    }
+
+    .online{
+        font-size:8px;
+        padding:7px 9px;
+    }
+
+    .container{
+        width:calc(100% - 20px);
+        margin-top:2px;
+    }
+
+    .hero{
+        padding-top:16px;
+    }
+
+    .logo{
+        width:80px;
+        height:80px;
+    }
+
+    .hero h1{
+        font-size:23px;
+    }
+
+    .card{
+        padding:16px;
+        border-radius:21px;
+    }
+
+    .code{
+        font-size:23px;
+        letter-spacing:4px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<video
+    class="bg-video"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+>
+    <source
+        src="https://files.catbox.moe/qmj6uz.mp4"
+        type="video/mp4"
+    >
+</video>
+
+<div class="overlay"></div>
+<div class="scanlines"></div>
+
+<header class="header">
+
+    <div class="brand">
+
+        <img
+            src="https://files.catbox.moe/qsrcvs.png"
+            alt="STINGER"
+        >
+
+        <div class="brand-text">
+            <strong>STINGER V6</strong>
+            <span>WHATSAPP WEBPAIR</span>
+        </div>
+
+    </div>
+
+    <div class="online">
+        <i class="online-dot"></i>
+        SYSTEM READY
+    </div>
+
+</header>
+
+<main class="container">
+
+    <section class="hero">
+
+        <img
+            class="logo"
+            src="https://files.catbox.moe/qsrcvs.png"
+            alt="STINGER V6"
+        >
+
+        <h1>
+            STINGER <span>V6</span>
+        </h1>
+
+        <p>
+            Securely connect your WhatsApp account
+            to STINGER VERSION 6 using a pairing code.
+        </p>
+
+    </section>
+
+    <section class="card">
+
+        <div class="card-title">
+            <div class="icon">🐝</div>
+            CONNECT YOUR WHATSAPP
+        </div>
+
+        <label class="label">
+            WhatsApp Number
+        </label>
+
+        <div class="input-wrap">
+
+            <span class="prefix">+</span>
+
+            <input
+                id="phone"
+                type="tel"
+                inputmode="numeric"
+                autocomplete="tel"
+                maxlength="15"
+                placeholder="263771234567"
+            >
+
+        </div>
+
+        <button
+            id="pairBtn"
+            class="btn primary"
+            onclick="startPairing()"
+        >
+            🔐 GENERATE PAIRING CODE
+        </button>
+
+        <!-- STATUS -->
+
+        <div
+            id="statusBox"
+            class="status-box"
+        >
+
+            <div class="status-top">
+
+                <div class="status-label">
+
+                    <span
+                        id="statusDot"
+                        class="status-dot"
+                    ></span>
+
+                    <span id="statusTitle">
+                        CONNECTING
+                    </span>
+
+                </div>
+
+                <span
+                    id="statusText"
+                    class="status-text"
+                >
+                    Please wait...
+                </span>
+
+            </div>
+
+        </div>
+
+        <!-- CODE -->
+
+        <div
+            id="codeCard"
+            class="code-card"
+        >
+
+            <div class="code-title">
+                YOUR STINGER PAIRING CODE
+            </div>
+
+            <div
+                id="pairCode"
+                class="code"
+            >
+                ----
+            </div>
+
+            <div class="code-buttons">
+
+                <button
+                    class="copy-btn"
+                    onclick="copyCode()"
+                >
+                    📋 COPY CODE
+                </button>
+
+                <button
+                    class="reset-btn"
+                    onclick="resetPairing()"
+                >
+                    ↻ NEW CODE
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- TIMER -->
+
+        <div
+            id="timerBox"
+            class="timer"
+        >
+
+            <div class="timer-row">
+                <span>CODE EXPIRATION</span>
+                <span id="timerText">02:00</span>
+            </div>
+
+            <div class="progress">
+                <div
+                    id="progressBar"
+                    class="progress-bar"
+                ></div>
+            </div>
+
+        </div>
+
+        <!-- STEPS -->
+
+        <div class="steps">
+
+            <div class="step">
+
+                <div class="step-number">01</div>
+
+                <div>
+                    <strong>Enter your number</strong>
+                    <span>
+                        Include your country code.
+                        Example: 263771234567
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="step">
+
+                <div class="step-number">02</div>
+
+                <div>
+                    <strong>Generate the code</strong>
+                    <span>
+                        Press the button above and wait
+                        for your unique pairing code.
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="step">
+
+                <div class="step-number">03</div>
+
+                <div>
+                    <strong>Link your device</strong>
+                    <span>
+                        WhatsApp → Settings → Linked Devices
+                        → Link a Device → Link with phone number.
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- BOT INFO -->
+
+        <div class="info-grid">
+
+            <div class="info">
+                <small>Bot</small>
+                <strong>STINGER V6</strong>
+            </div>
+
+            <div class="info">
+                <small>Version</small>
+                <strong>6.0.0</strong>
+            </div>
+
+            <div class="info">
+                <small>Developer</small>
+                <strong>CALLME_ALPHA</strong>
+            </div>
+
+            <div class="info">
+                <small>Country</small>
+                <strong>🇿🇼 Zimbabwe</strong>
+            </div>
+
+        </div>
+
+        <a
+            class="support"
+            href="https://whatsapp.com/channel/0029VbE25MNBlHpYK7C1G42j"
+            target="_blank"
+            rel="noopener"
+        >
+            📢 JOIN STINGER SUPPORT CHANNEL
+        </a>
+
+    </section>
+
+    <footer class="footer">
+
+        <b>🐝 STINGER VERSION 6</b><br>
+
+        Secure WebPair System • Powered by Node.js<br>
+
+        © 2026 CALLME_ALPHA
+
+    </footer>
+
+</main>
+
+<div
+    id="toast"
+    class="toast"
+></div>
+
+<script>
+"use strict";
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const API_BASE = "/api";
+
+let currentCode = "";
+let currentNumber = "";
+let pollTimer = null;
+let countdownTimer = null;
+
+const PAIR_TIMEOUT = 120000;
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const phoneInput =
+    document.getElementById("phone");
+
+const pairBtn =
+    document.getElementById("pairBtn");
+
+const statusBox =
+    document.getElementById("statusBox");
+
+const statusDot =
+    document.getElementById("statusDot");
+
+const statusTitle =
+    document.getElementById("statusTitle");
+
+const statusText =
+    document.getElementById("statusText");
+
+const codeCard =
+    document.getElementById("codeCard");
+
+const pairCode =
+    document.getElementById("pairCode");
+
+const timerBox =
+    document.getElementById("timerBox");
+
+const timerText =
+    document.getElementById("timerText");
+
+const progressBar =
+    document.getElementById("progressBar");
+
+const toast =
+    document.getElementById("toast");
+
+/* =========================================================
+   PHONE INPUT
+========================================================= */
+
+phoneInput.addEventListener(
+    "input",
+    () => {
+
+        phoneInput.value =
+            phoneInput.value
+                .replace(/\D/g, "")
+                .slice(0, 15);
+    }
+);
+
+/* =========================================================
+   ENTER KEY
+========================================================= */
+
+phoneInput.addEventListener(
+    "keydown",
+    event => {
+
+        if (event.key === "Enter") {
+            startPairing();
+        }
+    }
+);
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(
+    message,
+    type = ""
+) {
+
+    toast.textContent = message;
+
+    toast.className =
+        `toast show ${type}`;
+
+    clearTimeout(
+        showToast.timer
+    );
+
+    showToast.timer =
+        setTimeout(
+            () => {
+                toast.className = "toast";
+            },
+            3000
+        );
+}
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function setStatus(
+    title,
+    message,
+    type = "loading"
+) {
+
+    statusBox.style.display = "block";
+
+    statusTitle.textContent =
+        title;
+
+    statusText.textContent =
+        message;
+
+    statusDot.className =
+        "status-dot";
+
+    if (type === "success") {
+        statusDot.classList.add("success");
+    }
+
+    if (type === "error") {
+        statusDot.classList.add("error");
+    }
+}
+
+/* =========================================================
+   START PAIRING
+========================================================= */
+
+async function startPairing() {
+
+    let number =
+        phoneInput.value
+            .replace(/\D/g, "");
+
+    if (
+        number.length < 7 ||
+        number.length > 15
+    ) {
+
+        showToast(
+            "Enter a valid WhatsApp number with country code.",
+            "error"
+        );
+
+        phoneInput.focus();
+
+        return;
+    }
+
+    currentNumber = number;
+
+    clearInterval(pollTimer);
+    clearInterval(countdownTimer);
+
+    pairBtn.classList.add("loading");
+
+    pairBtn.innerHTML =
+        `<span class="spinner"></span> CONNECTING...`;
+
+    codeCard.style.display = "none";
+    timerBox.style.display = "none";
+
+    setStatus(
+        "CONNECTING",
+        "Creating secure WhatsApp session..."
+    );
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE}/pair`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        number
+                    })
+                }
+            );
+
+        const data =
+            await response.json()
+                .catch(() => ({}));
+
+        console.log(
+            "Pair response:",
+            data
+        );
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            const error =
+                data.error ||
+                data.message ||
+                "Pairing request failed.";
+
+            throw new Error(error);
+        }
+
+        currentCode =
+            data.code || "";
+
+        if (currentCode) {
+
+            showCode(
+                currentCode
+            );
+
+            setStatus(
+                "CODE READY",
+                "Enter this code in WhatsApp.",
+                "success"
+            );
+
+            showToast(
+                "Pairing code generated successfully.",
+                "success"
+            );
+
+            startCountdown(
+                data.expiresAt
+            );
+
+        } else {
+
+            setStatus(
+                "WAITING",
+                "Waiting for pairing code..."
+            );
+
+            startStatusPolling(
+                number
+            );
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Pairing error:",
+            error
+        );
+
+        setStatus(
+            "PAIRING FAILED",
+            error.message ||
+            "Unable to generate pairing code.",
+            "error"
+        );
+
+        showToast(
+            error.message ||
+            "Pairing failed.",
+            "error"
+        );
+
+    } finally {
+
+        pairBtn.classList.remove(
+            "loading"
+        );
+
+        pairBtn.innerHTML =
+            "🔐 GENERATE PAIRING CODE";
+    }
+}
+
+/* =========================================================
+   SHOW CODE
+========================================================= */
+
+function showCode(code) {
+
+    currentCode =
+        String(code)
+            .replace(/[^A-Z0-9]/gi, "")
+            .toUpperCase();
+
+    let formatted =
+        currentCode;
+
+    if (
+        currentCode.length > 4
+    ) {
+
+        formatted =
+            currentCode
+                .match(/.{1,4}/g)
+                .join("-");
+    }
+
+    pairCode.textContent =
+        formatted;
+
+    codeCard.style.display =
+        "block";
+
+    timerBox.style.display =
+        "block";
+
+    codeCard.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+    });
+}
+
+/* =========================================================
+   COPY CODE
+========================================================= */
+
+async function copyCode() {
+
+    if (!currentCode) {
+
+        showToast(
+            "No pairing code available.",
+            "error"
+        );
+
+        return;
+    }
+
+    try {
+
+        await navigator.clipboard.writeText(
+            currentCode
+        );
+
+        showToast(
+            "Pairing code copied to clipboard! 📋",
+            "success"
+        );
+
+        const button =
+            document.querySelector(
+                ".copy-btn"
+            );
+
+        const oldText =
+            button.innerHTML;
+
+        button.innerHTML =
+            "✓ COPIED";
+
+        setTimeout(
+            () => {
+                button.innerHTML =
+                    oldText;
+            },
+            1800
+        );
+
+    } catch (error) {
+
+        /* Fallback */
+
+        const textarea =
+            document.createElement(
+                "textarea"
+            );
+
+        textarea.value =
+            currentCode;
+
+        document.body.appendChild(
+            textarea
+        );
+
+        textarea.select();
+
+        document.execCommand(
+            "copy"
+        );
+
+        textarea.remove();
+
+        showToast(
+            "Pairing code copied! 📋",
+            "success"
+        );
+    }
+}
+
+/* =========================================================
+   POLLING
+========================================================= */
+
+function startStatusPolling(
+    number
+) {
+
+    clearInterval(
+        pollTimer
+    );
+
+    pollTimer =
+        setInterval(
+            async () => {
+
+                try {
+
+                    const response =
+                        await fetch(
+                            `${API_BASE}/pair/status?number=${encodeURIComponent(number)}`
+                        );
+
+                    const data =
+                        await response.json();
+
+                    if (
+                        data.code &&
+                        !currentCode
+                    ) {
+
+                        currentCode =
+                            data.rawCode ||
+                            data.code;
+
+                        showCode(
+                            currentCode
+                        );
+
+                        setStatus(
+                            "CODE READY",
+                            "Enter this code in WhatsApp.",
+                            "success"
+                        );
+
+                        showToast(
+                            "Pairing code is ready.",
+                            "success"
+                        );
+
+                        startCountdown(
+                            data.expiresAt
+                        );
+
+                        clearInterval(
+                            pollTimer
+                        );
+                    }
+
+                    if (
+                        data.status ===
+                        "connected"
+                    ) {
+
+                        clearInterval(
+                            pollTimer
+                        );
+
+                        setStatus(
+                            "CONNECTED",
+                            "WhatsApp has been linked successfully.",
+                            "success"
+                        );
+
+                        showToast(
+                            "STINGER connected successfully! 🐝",
+                            "success"
+                        );
+                    }
+
+                    if (
+                        data.status ===
+                            "failed" ||
+                        data.status ===
+                            "expired"
+                    ) {
+
+                        clearInterval(
+                            pollTimer
+                        );
+
+                        setStatus(
+                            data.status ===
+                                "expired"
+                                ? "EXPIRED"
+                                : "PAIRING FAILED",
+                            data.error ||
+                            "The pairing session ended.",
+                            "error"
+                        );
+                    }
+
+                } catch (error) {
+
+                    console.error(
+                        "Status error:",
+                        error
+                    );
+
+                }
+
+            },
+            2500
+        );
+}
+
+/* =========================================================
+   COUNTDOWN
+========================================================= */
+
+function startCountdown(
+    expiresAt
+) {
+
+    clearInterval(
+        countdownTimer
+    );
+
+    let end =
+        Number(expiresAt);
+
+    if (
+        !end ||
+        Number.isNaN(end)
+    ) {
+        end =
+            Date.now() +
+            PAIR_TIMEOUT;
+    }
+
+    const total =
+        Math.max(
+            1000,
+            end - Date.now()
+        );
+
+    countdownTimer =
+        setInterval(
+            () => {
+
+                const remaining =
+                    Math.max(
+                        0,
+                        end - Date.now()
+                    );
+
+                const seconds =
+                    Math.ceil(
+                        remaining / 1000
+                    );
+
+                const minutes =
+                    Math.floor(
+                        seconds / 60
+                    );
+
+                const secs =
+                    seconds % 60;
+
+                timerText.textContent =
+                    `${String(minutes).padStart(2,"0")}:${String(secs).padStart(2,"0")}`;
+
+                const percent =
+                    Math.max(
+                        0,
+                        Math.min(
+                            100,
+                            remaining /
+                            total *
+                            100
+                        )
+                    );
+
+                progressBar.style.width =
+                    `${percent}%`;
+
+                if (
+                    remaining <= 0
+                ) {
+
+                    clearInterval(
+                        countdownTimer
+                    );
+
+                    setStatus(
+                        "EXPIRED",
+                        "Generate a new pairing code.",
+                        "error"
+                    );
+
+                    showToast(
+                        "Pairing code expired.",
+                        "error"
+                    );
+                }
+
+            },
+            1000
+        );
+}
+
+/* =========================================================
+   RESET PAIRING
+========================================================= */
+
+async function resetPairing() {
+
+    clearInterval(
+        pollTimer
+    );
+
+    clearInterval(
+        countdownTimer
+    );
+
+    if (currentNumber) {
+
+        try {
+
+            await fetch(
+                `${API_BASE}/pair/reset`,
+                {
+                    method:"POST",
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body:JSON.stringify({
+                        number:
+                            currentNumber
+                    })
+                }
+            );
+
+        } catch (_) {}
+    }
+
+    currentCode = "";
+
+    codeCard.style.display =
+        "none";
+
+    timerBox.style.display =
+        "none";
+
+    statusBox.style.display =
+        "none";
+
+    pairCode.textContent =
+        "----";
+
+    progressBar.style.width =
+        "100%";
+
+    showToast(
+        "Pairing session reset.",
+        "success"
+    );
+
+    phoneInput.focus();
+}
+
+/* =========================================================
+   VIDEO AUTOPLAY FALLBACK
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const video =
+            document.querySelector(
+                ".bg-video"
+            );
+
+        video.play()
+            .catch(() => {});
+    }
+);
+</script>
+
+</body>
+</html>
