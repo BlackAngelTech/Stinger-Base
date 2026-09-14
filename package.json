@@ -1,0 +1,38 @@
+{
+  "name": "stinger-v6",
+  "version": "6.0.0",
+  "description": "STINGER V6 — Professional WhatsApp WebPair Bot with Admin Dashboard",
+  "main": "index.js",
+  "type": "commonjs",
+
+  "scripts": {
+    "start": "node --env-file=.env index.js",
+    "dev": "node --watch --env-file=.env index.js"
+  },
+
+  "engines": {
+    "node": ">=20.6.0"
+  },
+
+  "keywords": [
+    "whatsapp",
+    "whatsapp-bot",
+    "baileys",
+    "webpair",
+    "stinger",
+    "stinger-v6",
+    "nodejs",
+    "bot",
+    "admin-panel"
+  ],
+
+  "author": "Alpha",
+
+  "license": "MIT",
+
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.20",
+    "express": "^4.21.2",
+    "pino": "^9.6.0"
+  }
+}
